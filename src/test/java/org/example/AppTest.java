@@ -1,20 +1,33 @@
 package org.example;
 
-import static org.junit.Assert.assertTrue;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
-import org.junit.Test;
+import java.io.*;
 
-/**
- * Unit test for simple App.
- */
-public class AppTest 
-{
-    /**
-     * Rigorous Test :-)
-     */
+
+public class AppTest {
+
     @Test
-    public void shouldAnswerWithTrue()
-    {
-        assertTrue( true );
+    public void testWriteMsg() throws IOException {
+        String msg = "Test message";
+        File file = new File("D://file.log");
+        long beforeLength = file.length();
+        Server.writeFileServer(msg);
+        long afterLength = file.length();
+        boolean afterLengthOverBefore = afterLength > beforeLength;
+        String fileContent = readLogFile(file.getAbsolutePath());
+        boolean haveTestMsg = fileContent.substring(fileContent.length() - msg.length()).contains(msg);
+        Assertions.assertTrue(afterLengthOverBefore && haveTestMsg);
+    }
+
+    private static String readLogFile(String fileName) throws IOException {
+        BufferedReader reader = new BufferedReader(new FileReader(fileName));
+        String line = null;
+        StringBuilder stringBuilder = new StringBuilder();
+        while ((line = reader.readLine()) != null) {
+            stringBuilder.append(line);
+        }
+        return stringBuilder.toString();
     }
 }
