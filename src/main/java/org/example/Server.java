@@ -9,7 +9,7 @@ public class Server extends Thread{
 
     public static LinkedList<Server> serverList = new LinkedList<>();
     private final Socket socket; // сокет, через который сервер общается с клиентом,
-    private final BufferedReader in; // поток чтения из сокета
+    public final BufferedReader in; // поток чтения из сокета
     private final BufferedWriter out; // поток завписи в сокет
 
     public Server(Socket socket) throws IOException {
@@ -21,7 +21,7 @@ public class Server extends Thread{
 
     public static void main(String[] args) throws IOException {
         Properties props = new Properties();
-        props.load(new FileInputStream(new File("D://settings.txt")));
+        props.load(new FileInputStream(new File("settings.txt")));
         int SERVER_PORT = Integer.parseInt(props.getProperty("SERVER_PORT"));
 
         try (ServerSocket server = new ServerSocket(SERVER_PORT)) {
@@ -73,9 +73,10 @@ public class Server extends Thread{
             out.write(msg + "\n");
             out.flush();
         } catch (IOException ignored) {}
+
     }
 
-    private void downSocket() {
+    protected void downSocket() {
         try {
             if(!socket.isClosed()) {
                 socket.close();
@@ -93,9 +94,9 @@ public class Server extends Thread{
         } catch (IOException ignored) {}
     }
 
-    private static void writeFileServer(String msg) {
-        try (FileWriter writer = new FileWriter("D://file.log", true)) {
-            writer.append(new SimpleDateFormat("yyyy.MM.dd HH:mm:ss").format(Calendar.getInstance().getTime()))
+    protected static void writeFileServer(String msg) {
+        try (FileWriter writer = new FileWriter("file.log", true)) {
+            writer.append(new SimpleDateFormat("dd.MM.yyyy HH:mm:ss").format(Calendar.getInstance().getTime()))
                     .append(" ")
                     .append(msg)
                     .append('\n')

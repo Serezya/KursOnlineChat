@@ -15,7 +15,7 @@ public class Client {
 
     public Client() throws IOException {
         Properties props = new Properties();
-        props.load(new FileInputStream(new File("D://settings.txt")));
+        props.load(new FileInputStream(new File("settings.txt")));
         int SERVER_PORT = Integer.parseInt(props.getProperty("SERVER_PORT"));
         this.addr = "localhost";
         try {
@@ -59,6 +59,7 @@ public class Client {
             }
         } catch (IOException ignored) {
         }
+        socket.isClosed();
     }
 
     private class ReadChat extends Thread {
